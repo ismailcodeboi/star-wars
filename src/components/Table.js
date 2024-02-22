@@ -1,16 +1,17 @@
 import React, {useEffect} from 'react';
-import DataTable, { createTheme } from "react-data-table-component";
-import {useNavigate} from "react-router-dom";
+//import DataTable, { createTheme } from "react-data-table-component";
+//import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {fetchMovies} from "../helpers/movies";
+import { TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
 
 export function Table(props) {
     const dispatch = useDispatch();
 
-    const navigate = useNavigate();
+    /*const navigate = useNavigate();
     const handleClick = (id) => {
         navigate(`/movie/${id}`);
-    };
+    };*/
 
     const moviesStatus = useSelector( state => state.data.status);
 
@@ -42,7 +43,7 @@ export function Table(props) {
         },
     ]
 
-    createTheme(
+    /*createTheme(
         'solarized',
         {
             text: {
@@ -61,15 +62,38 @@ export function Table(props) {
             }
         },
         'dark',
-    );
+    );*/
 
     return (
-        <DataTable
-            columns={columns}
-            data={movies.movies}
-            onRowClicked={ (row, event) => {handleClick(row.id)}}
-            theme="solarized"
-        />
+
+        <TableContainer>
+            {/*<DataTable
+                columns={columns}
+                data={movies.movies}
+                onRowClicked={ (row, event) => {handleClick(row.id)}}
+                theme="solarized"
+            />*/}
+
+            <Table>
+                <TableHead>
+                    <TableRow>
+                        {columns.map((row) => (
+                            <TableCell>{row.name}</TableCell>
+                        ))}
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {movies.movies.map((row) => (
+                        <TableRow key={row.id}
+                        >
+                            <TableCell> {row.title}</TableCell>
+                            <TableCell>{row.description}</TableCell>
+                            <TableCell>{row.releaseDate}</TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+        </TableContainer>
     );
 }
 
