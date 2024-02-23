@@ -4,7 +4,8 @@ import {useDispatch, useSelector} from "react-redux";
 import {fetchMovies} from "../helpers/redux/movies";
 import {
     Backdrop,
-    Box, CircularProgress,
+    Box,
+    CircularProgress,
     Paper,
     Table,
     TableBody,
@@ -25,20 +26,13 @@ export function MovieTable() {
         navigate(`/movie/${id}`);
     };
 
-    const headCells = [
-        {
-            id: "title",
-            label: "Title"
-        },
-        {
-            id: "releaseDate",
-            label: "Release Date"
-        },
-        {
-            id: "director",
-            label: "Director"
-        }
-    ]
+    const headCells = [{
+        id: "title", label: "Title"
+    }, {
+        id: "releaseDate", label: "Release Date"
+    }, {
+        id: "director", label: "Director"
+    }]
 
     const handleRequestSort = (property) => (event) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -46,15 +40,11 @@ export function MovieTable() {
         setOrderBy(property);
     };
 
-    const moviesStatus = useSelector( state => state.data.status);
+    const moviesStatus = useSelector(state => state.data.status);
 
     const movies = useSelector(state => state.data);
 
-    const sortedMovies = useMemo(
-        () =>
-            stableSort(movies.movies, getComparator(order, orderBy)),
-        [getComparator, movies.movies, order, orderBy],
-    );
+    const sortedMovies = useMemo(() => stableSort(movies.movies, getComparator(order, orderBy)), [getComparator, movies.movies, order, orderBy],);
 
     function stableSort(array, comparator) {
         const stabilizedThis = array.map((el, index) => [el, index]);
@@ -69,9 +59,7 @@ export function MovieTable() {
     }
 
     function getComparator(order, orderBy) {
-        return order === 'desc'
-            ? (a, b) => descendingComparator(a, b, orderBy)
-            : (a, b) => -descendingComparator(a, b, orderBy);
+        return order === 'desc' ? (a, b) => descendingComparator(a, b, orderBy) : (a, b) => -descendingComparator(a, b, orderBy);
     }
 
     function descendingComparator(a, b, orderBy) {
@@ -87,67 +75,58 @@ export function MovieTable() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if(moviesStatus === 'idle') {
+        if (moviesStatus === 'idle') {
             let getData = setTimeout(() => {
                 dispatch(fetchMovies());
             }, 0);
             return () => clearTimeout(getData);
-        }else if( moviesStatus === 'succeeded') {
+        } else if (moviesStatus === 'succeeded') {
             setLoading(false);
         }
     }, [dispatch, moviesStatus, setLoading]);
 
-    if(loading) {
-        return (
-            <Backdrop
-            sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+    if (loading) {
+        return (<Backdrop
+            sx={{color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1}}
             open={loading}>
-            <CircularProgress color="inherit" />
-        </Backdrop>
-        )
+            <CircularProgress color="inherit"/>
+        </Backdrop>)
     }
 
-    return (
-                    <TableContainer component={Paper} sx={{ margin: "50px", width: "auto"}}>
-                        <Table aria-label="simple table">
-                            <TableHead>
-                                <TableRow>
-                                    {headCells.map((headCell) =>(
-                                        <TableCell
-                                            key={headCell.id}
-                                            sortDirection={orderBy === headCell.id ? order : false}
-                                        >
-                                            <TableSortLabel
-                                                active={orderBy === headCell.id}
-                                                direction={orderBy === headCell.id ? order : 'asc'}
-                                                onClick={handleRequestSort(headCell.id)}
-                                            >
-                                                {headCell.label}
-                                                {orderBy === headCell.id ? (
-                                                    <Box component="span" sx={visuallyHidden}>
-                                                        {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                                                    </Box>
-                                                ) : null}
-                                            </TableSortLabel>
-                                        </TableCell>
-                                    ))}
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {sortedMovies.map((row) => (
-                                    <TableRow
-                                        key={row.id}
-                                        sx={{'&:last-child td, &:last-child th': {border: 0}}}
-                                        onClick={() => handleClick(row.id)}
-                                    >
-                                        <TableCell >{row.title}</TableCell>
-                                        <TableCell >{row.releaseDate}</TableCell>
-                                        <TableCell >{row.director}</TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+    return (<TableContainer component={Paper} sx={{margin: "50px", width: "auto"}}>
+            <Table aria-label="simple table">
+                <TableHead>
+                    <TableRow>
+                        {headCells.map((headCell) => (<TableCell
+                            key={headCell.id}
+                            sortDirection={orderBy === headCell.id ? order : false}
+                        >
+                            <TableSortLabel
+                                active={orderBy === headCell.id}
+                                direction={orderBy === headCell.id ? order : 'asc'}
+                                onClick={handleRequestSort(headCell.id)}
+                            >
+                                {headCell.label}
+                                {orderBy === headCell.id ? (<Box component="span" sx={visuallyHidden}>
+                                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                                </Box>) : null}
+                            </TableSortLabel>
+                        </TableCell>))}
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {sortedMovies.map((row) => (<TableRow
+                        key={row.id}
+                        sx={{'&:last-child td, &:last-child th': {border: 0}}}
+                        onClick={() => handleClick(row.id)}
+                    >
+                        <TableCell>{row.title}</TableCell>
+                        <TableCell>{row.releaseDate}</TableCell>
+                        <TableCell>{row.director}</TableCell>
+                    </TableRow>))}
+                </TableBody>
+            </Table>
+        </TableContainer>
 
     );
 }

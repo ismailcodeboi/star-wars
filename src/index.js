@@ -6,16 +6,20 @@ import reportWebVitals from './reportWebVitals';
 import {BrowserRouter} from "react-router-dom";
 import {Provider} from "react-redux";
 import store from './helpers/redux/store';
+import {ThemeProvider} from "@mui/material";
+import {themeOptions} from "./helpers/theme";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-      <Provider store={store}>
-      <BrowserRouter>
-          <App />
-      </BrowserRouter>
-      </Provider>
-  </React.StrictMode>
+    <React.StrictMode>
+        <ThemeProvider theme={themeOptions}>
+            <Provider store={store}>
+                <BrowserRouter>
+                    <App/>
+                </BrowserRouter>
+            </Provider>
+        </ThemeProvider>
+    </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

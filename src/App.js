@@ -2,7 +2,7 @@
 import './App.css';
 
 import {MovieTable} from "./components/Table";
-import Header from "./components/Header/Header";
+import Header from "./components/header/Header";
 import {Route, Routes} from "react-router-dom";
 import Details from "./components/Details";
 
