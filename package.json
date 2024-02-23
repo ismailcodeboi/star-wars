@@ -1,5 +1,6 @@
 {
   "name": "star-wars",
+  "homepage": "https://ismailcodeboi.github.io/star-wars",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
