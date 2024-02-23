@@ -9,7 +9,7 @@ export const getAllMovie = async () => {
                 .pop()
         ),
         title: movie.title,
-        description: movie.opening_crawl,
+        director: movie.director,
         releaseDate: movie.release_date,
     }));
     return editedMovieList;

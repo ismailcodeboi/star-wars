@@ -1,5 +1,5 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import {getSingleMovie} from "./api";
+import {getSingleMovie} from "../api";
 
 const initialState = {
     movieDetails: {},
