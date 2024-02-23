@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/static/css/main.a6bfa88f.css",
+    "main.js": "/static/js/main.a3710ea5.js",
+    "static/js/453.10abf4b2.chunk.js": "/static/js/453.10abf4b2.chunk.js",
+    "static/media/star-wars-header.webp": "/static/media/star-wars-header.6e4ecb2db7d0366f5032.webp",
+    "index.html": "/index.html",
+    "main.a6bfa88f.css.map": "/static/css/main.a6bfa88f.css.map",
+    "main.a3710ea5.js.map": "/static/js/main.a3710ea5.js.map",
+    "453.10abf4b2.chunk.js.map": "/static/js/453.10abf4b2.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a6bfa88f.css",
+    "static/js/main.a3710ea5.js"
+  ]
+}
