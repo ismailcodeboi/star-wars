@@ -1,5 +1,5 @@
 import React from 'react';
-import logoUrl from '../../assets/star-wars-header.webp'
+import logoUrl from '../../assets/star-wars-header.jpg'
 import './Header.css';
 
 function Header() {
