@@ -1,7 +1,7 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchMovies} from "../helpers/redux/movies";
+import {fetchMovies} from "../../helpers/redux/movies";
 import {
     Backdrop,
     Box,
@@ -16,12 +16,31 @@ import {
     TableSortLabel
 } from "@mui/material";
 import {visuallyHidden} from "@mui/utils";
+import Error from "../error/Error";
 
 export function MovieTable() {
     const dispatch = useDispatch();
     const [orderBy, setOrderBy] = useState('Title');
-    const [order, setOrder] = React.useState('asc');
+    const [order, setOrder] = useState('asc');
+    const [loading, setLoading] = useState(true);
+    const [failed, setFailed] = useState(false);
     const navigate = useNavigate();
+    const moviesStatus = useSelector(state => state.data.status);
+    const movies = useSelector(state => state.data);
+
+    useEffect(() => {
+        if (moviesStatus === 'idle') {
+            let getData = setTimeout(() => {
+                dispatch(fetchMovies());
+            }, 0);
+            return () => clearTimeout(getData);
+        } else if (moviesStatus === 'succeeded') {
+            setLoading(false);
+        } else if (moviesStatus === 'failed') {
+            setFailed(true);
+        }
+    }, [dispatch, moviesStatus, setLoading]);
+
     const handleClick = (id) => {
         navigate(`/movie/${id}`);
     };
@@ -39,13 +58,6 @@ export function MovieTable() {
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
     };
-
-    const moviesStatus = useSelector(state => state.data.status);
-
-    const movies = useSelector(state => state.data);
-
-    const sortedMovies = useMemo(() => stableSort(movies.movies, getComparator(order, orderBy)), [getComparator, movies.movies, order, orderBy],);
-
     function stableSort(array, comparator) {
         const stabilizedThis = array.map((el, index) => [el, index]);
         stabilizedThis.sort((a, b) => {
@@ -58,9 +70,9 @@ export function MovieTable() {
         return stabilizedThis.map((el) => el[0]);
     }
 
-    function getComparator(order, orderBy) {
+    const getComparator = useCallback((order, orderBy) => {
         return order === 'desc' ? (a, b) => descendingComparator(a, b, orderBy) : (a, b) => -descendingComparator(a, b, orderBy);
-    }
+    }, [])
 
     function descendingComparator(a, b, orderBy) {
         if (b[orderBy] < a[orderBy]) {
@@ -72,18 +84,7 @@ export function MovieTable() {
         return 0;
     }
 
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        if (moviesStatus === 'idle') {
-            let getData = setTimeout(() => {
-                dispatch(fetchMovies());
-            }, 0);
-            return () => clearTimeout(getData);
-        } else if (moviesStatus === 'succeeded') {
-            setLoading(false);
-        }
-    }, [dispatch, moviesStatus, setLoading]);
+    const sortedMovies = useMemo(() => stableSort(movies.movies, getComparator(order, orderBy)), [getComparator, movies.movies, order, orderBy]);
 
     if (loading) {
         return (<Backdrop
@@ -91,6 +92,10 @@ export function MovieTable() {
             open={loading}>
             <CircularProgress color="inherit"/>
         </Backdrop>)
+    }
+
+    if (failed) {
+        return <Error />
     }
 
     return (<TableContainer component={Paper} sx={{margin: "50px", width: "auto"}}>

@@ -4,13 +4,18 @@ import {getSingleMovie} from "../api";
 const initialState = {
     movieDetails: {},
     status: 'idle',
-    error: null
+    error: null,
+    movieId: null
 }
 
 const movieDetail = createSlice ({
     name: 'movieDetails',
     initialState,
-    reducers : {},
+    reducers : {
+            change: state => {
+                state.status = "idle";
+            }
+    },
     extraReducers(builder) {
         builder
             .addCase(fetchSingleMovie.pending, (state, action) => {
@@ -18,7 +23,7 @@ const movieDetail = createSlice ({
             })
             .addCase(fetchSingleMovie.fulfilled, (state, action) => {
                 state.status = 'succeeded'
-                state.movies = state.movieDetails = action.payload
+                state.movieDetails = action.payload
             })
             .addCase(fetchSingleMovie.rejected, (state, action) => {
                 state.status = 'failed'
@@ -28,6 +33,9 @@ const movieDetail = createSlice ({
 });
 
 export default movieDetail.reducer
+
+
+export const {change} = movieDetail.actions
 
 export const fetchSingleMovie= createAsyncThunk('movies/fetchSingleMovie', async (id) => {
     return getSingleMovie(id)

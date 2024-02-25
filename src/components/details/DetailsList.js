@@ -6,7 +6,7 @@ function DetailsList({props}) {
     return (
         <>
         <Typography variant="h6" sx={{marginTop: "10px"}}>{props.name}</Typography>
-        <List sx={{width: '100%', maxHeight: 200, display: 'flex', flexFlow: 'column wrap'}}>
+        <List sx={{width: '100%', maxHeight: 250, display: 'flex', flexFlow: 'column wrap', overflow: 'scroll'}}>
             {props.data.map((data, index) => (
                 <ListItem sx={{width: 'auto'}} key={index}>
                     <ListItemIcon>

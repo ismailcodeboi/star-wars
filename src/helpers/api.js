@@ -49,6 +49,7 @@ export const getSingleMovie = async (id) => {
     const starships = await Promise.all(resStarships);
     const vehicles = await Promise.all(resVehicles);
     const data = {
+        id: id,
         characters,
         director: resJson.director,
         description: resJson.opening_crawl,

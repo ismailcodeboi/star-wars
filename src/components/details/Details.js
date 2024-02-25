@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {fetchSingleMovie} from "../../helpers/redux/movieDetails";
+import {change, fetchSingleMovie} from "../../helpers/redux/movieDetails";
 import {useNavigate, useParams} from "react-router-dom";
 import {
     Backdrop,
@@ -13,28 +13,35 @@ import {
 } from "@mui/material";
 import {ArrowBack} from "@mui/icons-material";
 import DetailsList from "./DetailsList";
+import Error from "../error/Error"
 
 
 function Details() {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(true);
+    const [failed, setFailed] = useState(false);
     const moviesStatus = useSelector(state => state.movieData.status);
     const routeParams = useParams();
     const movieDetails = useSelector(state => state.movieData.movieDetails);
-    console.log(movieDetails);
+
     useEffect(() => {
         if (moviesStatus === 'idle') {
-            let getData = setTimeout(() => {
-                dispatch(fetchSingleMovie(routeParams.id));
-            }, 0)
-            return () => clearTimeout(getData)
+            if(movieDetails.id !== routeParams.id) {
+                let getData = setTimeout(() => {
+                    dispatch(fetchSingleMovie(routeParams.id));
+                }, 0)
+                return () => clearTimeout(getData)
+            } else setLoading(false);
         } else if (moviesStatus === 'succeeded') {
             setLoading(false);
+        } else if(moviesStatus === 'failed') {
+            setFailed(true);
         }
-    }, [dispatch, moviesStatus, routeParams.id]);
+    }, [dispatch, movieDetails.id, moviesStatus, routeParams.id]);
     const navigate = useNavigate();
 
     const handleBackClick = () => {
+        dispatch(change());
         navigate(`/`);
     }
 
@@ -47,6 +54,11 @@ function Details() {
             </Backdrop>
         )
     }
+
+    if (failed) {
+        return <Error />
+    }
+
     return (
         <Card sx={{margin: "50px"}}>
             <IconButton sx={{display: "flex"}} aria-label="settings" onClick={handleBackClick} color="secondary">
