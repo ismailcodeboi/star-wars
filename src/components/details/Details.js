@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {change, fetchSingleMovie} from "../../helpers/redux/movieDetails";
+import {changeDetailStatus, fetchSingleMovie} from "../../helpers/redux/movieDetails";
 import {useNavigate, useParams} from "react-router-dom";
 import {
     Backdrop,
@@ -23,6 +23,7 @@ function Details() {
     const moviesStatus = useSelector(state => state.movieData.status);
     const routeParams = useParams();
     const movieDetails = useSelector(state => state.movieData.movieDetails);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (moviesStatus === 'idle') {
@@ -34,14 +35,14 @@ function Details() {
             } else setLoading(false);
         } else if (moviesStatus === 'succeeded') {
             setLoading(false);
-        } else if(moviesStatus === 'failed') {
+        } else if (moviesStatus === 'failed') {
+            setLoading(false);
             setFailed(true);
         }
     }, [dispatch, movieDetails.id, moviesStatus, routeParams.id]);
-    const navigate = useNavigate();
 
     const handleBackClick = () => {
-        dispatch(change());
+        dispatch(changeDetailStatus());
         navigate(`/`);
     }
 
@@ -56,7 +57,7 @@ function Details() {
     }
 
     if (failed) {
-        return <Error />
+        navigate(`error`);
     }
 
     return (

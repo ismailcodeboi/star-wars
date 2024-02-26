@@ -37,6 +37,7 @@ export function MovieTable() {
         } else if (moviesStatus === 'succeeded') {
             setLoading(false);
         } else if (moviesStatus === 'failed') {
+            setLoading(false);
             setFailed(true);
         }
     }, [dispatch, moviesStatus, setLoading]);
@@ -95,7 +96,7 @@ export function MovieTable() {
     }
 
     if (failed) {
-        return <Error />
+        navigate(`error`);
     }
 
     return (<TableContainer component={Paper} sx={{margin: "50px", width: "auto"}}>

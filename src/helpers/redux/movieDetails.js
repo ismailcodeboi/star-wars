@@ -12,7 +12,7 @@ const movieDetail = createSlice ({
     name: 'movieDetails',
     initialState,
     reducers : {
-            change: state => {
+            changeDetailStatus: state => {
                 state.status = "idle";
             }
     },
@@ -35,7 +35,7 @@ const movieDetail = createSlice ({
 export default movieDetail.reducer
 
 
-export const {change} = movieDetail.actions
+export const {changeDetailStatus} = movieDetail.actions
 
 export const fetchSingleMovie= createAsyncThunk('movies/fetchSingleMovie', async (id) => {
     return getSingleMovie(id)

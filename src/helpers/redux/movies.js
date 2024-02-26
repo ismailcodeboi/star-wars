@@ -10,7 +10,11 @@ const initialState = {
 const movies = createSlice ({
     name: 'movies',
     initialState,
-    reducers : {},
+    reducers : {
+        changeListStatus: state => {
+            state.status = "idle";
+        }
+    },
     extraReducers(builder) {
         builder
             .addCase(fetchMovies.pending, (state, action) => {
@@ -28,6 +32,8 @@ const movies = createSlice ({
 });
 
 export default movies.reducer
+
+export const {changeListStatus} = movies.actions
 
 export const fetchMovies = createAsyncThunk('movies/fetchMovies', async () => {
     return getAllMovie();
